@@ -2,7 +2,6 @@
 ## by Brannon Rovins 
 ### Fall 2025
 
-take a look around
- 
+writing in markdown lol 
 - thing 1
 - thing 2
