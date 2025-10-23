@@ -11,7 +11,7 @@ ___ ___ ___
 > The synth should be able to handle multiple types of articulations (staccato, legato, sforzando, detache). Within the program there should also be some control over how the instrument will transition between notes, whether fully connected and slurred or very short like a bow coming off the string. Some tone control would be a nice addition, although the tone doesn't need to be 100% realistic (artificial sounding strings are okay as long as the start / stop of the note is convincing)
 
 ## Anticipated resources -
-> I will need to research various methods for string synthesis (FM, KarplusStrong, etc). Additionally I'll search for data on bowed string sounds and how the sound evolves over the length of one note. What overtones are more present during the transient? Which overtones fall off first as the note sustains? As the bow comes off the string? (I could maybe conduct some research myself...)
+> I will need to research various methods for string synthesis (FM, KarplusStrong, etc) and how to implement them within javascript. Additionally I'll search for data on bowed string sounds and how the sound evolves over the length of one note. What overtones are more present during the transient? Which overtones fall off first as the note sustains? As the bow comes off the string? (I could maybe conduct some research myself...)
 
 ## Timeline with milestones -
 > week 1:
