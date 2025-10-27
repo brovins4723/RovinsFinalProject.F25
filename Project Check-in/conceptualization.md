@@ -15,19 +15,19 @@ ___ ___ ___
 
 ## Timeline with milestones -
 > week 1:
->> Researching different string modeling algorithms
->> Look for documentation on physical bowed strings (for shaping / filtering the string sound as it evolves)
+- Researching different string modeling algorithms
+- Look for documentation on physical bowed strings (for shaping / filtering the string sound as it evolves)
 
 > week 2:
->> Build a simple program which makes sound (for experimenting with and comparing different synthesis tecnniques)
->> Decide which techniques will be used for the final synth
->> Decide how many articulation and release types will be used
+- Build a simple program which makes sound (for experimenting with and comparing different synthesis tecnniques)
+- Decide which techniques will be used for the final synth
+- Decide how many articulation and release types will be used
 
 > week 3 (prototyping):
->> Design ideas for the user interface (how will user select between articulations and release types? will it use a sequencer or a MIDI input? what sort of tone control?)
->> 
+- Design ideas for the user interface (how will user select between articulations and release types? will it use a sequencer or a MIDI input? what sort of tone control?)
+ 
 >>
 
 > week 4:
->> Final testing and tweaking
->> Preparing for presentation.
+- Final testing and tweaking
+- Preparing for presentation.
