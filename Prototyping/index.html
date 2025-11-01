@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="module" src="main.js"></script>
+</head>
+<body>
+    <button>Start audio</button>
+    <div id="adsrStuff">
+        <label for="attackSlider">Attack</label>
+        <input type="range" id="attackSlider" min="0.02" max="2" step="0.01" value="0.02">
+        <label for="attackSlider" id="attackValue">0.02 sec</label>
+    </div>
+    <div id="adsrStuff">
+        <label for="decaySlider">Decay</label>
+        <input type="range" id="decaySlider" min="0.02" max="2" step="0.01" value="0.3">
+        <label for="decaySlider" id="decayValue">0.3 sec</label>
+    </div>
+    <div id="adsrStuff">
+        <label for="sustainSlider">Sustain</label>
+        <input type="range" id="sustainSlider" min="0.01" max="0.99" step="0.01" value="0.4">
+        <label for="sustainSlider" id="sustainValue">0.4</label>
+    </div>
+    <div id="adsrStuff">
+        <label for="releaseSlider">Release</label>
+        <input type="range" id="releaseSlider" min="0.02" max="2" step="0.01" value="0.5">
+        <label for="releaseSlider" id="releaseValue">0.5 sec</label>
+    </div>
+   
+    <div id="delayStuff">
+        <label for="delayTime">DelayTime</label>
+        <input type="range" id="delayTime" min="0.02" max="2" step="0.01" value="0.0">
+        <label for="delayTime" id="delayTimeValue">0.5 sec</label>
+    </div>
+    <div id="delayStuff">
+        <label for="delayGain">DelayGain</label>
+        <input type="range" id="delayGain" min="0.02" max="0.99" step="0.01" value="0.0">
+        <label for="delayGain" id="delayGainValue">0.0</label>
+    </div>
+    <div id="master">
+        <label for="masterGain">MasterGain</label>
+        <input type="range" id="masterGain" min="0.02" max="0.99" step="0.01" value="0.5">
+        <label for="masterGain" id="masterGainValue">0.5</label>
+    </div>
+</body>
+</html>
