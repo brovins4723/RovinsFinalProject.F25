@@ -1,0 +1,24 @@
+/* this is a CSS comment*/
+
+.button-container {
+  position: fixed;        /* stays in place when scrolling */
+  right: 90px;            /* distance from right edge */
+  top: 10%;               
+  transform: translateY(-50%);
+  
+  display: flex;
+  flex-direction: row;    
+  gap: 30px;              /* space between buttons */
+}
+
+.control-btn {
+  width: 120px;           /* button width */
+  height: 40px;           /* button height */
+  background-color: #ffc971;
+  color: rgb(77, 6, 6);
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+}
