@@ -7,20 +7,70 @@ const master = new GainNode(ctx);
 master.connect(ctx.destination);
 
 const myNotes = new Array(128);         // new notes are stored in an array where index = the midi note#
-const adsrArray = [0.2, 0.15, 0.4, 0.5];     // storing ADSR values in a new array
-        // envelope attack time (sec)
-        // decay time (sec)
-        // sustain level (%of max gain)
-        // release time (sec)
 
-const filterArray = new Array()
+const value = null
+const duration = null
+let articNum = 0
+const adsrArray = [
+  [                     // amp envelope 1
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // amp envelope 2
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // amp envelope 3
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // amp envelope 4
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ]
+];
+        
+const filterArray = [
+  [                     // filter envelope 1
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // filter envelope 2
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // filter envelope 3
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ],
+  [                     // filter envelope 4
+  [1, duration],
+  [value, duration],
+  [value, duration],
+  [value, duration],
+  ]
+];
 
 const midi = new MIDIengine();
 
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
-    myNotes[note] = new Synth(ctx, note, velocity, adsrArray);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
-    myNotes[note].env.connect(master);      // connect the envelope (gain node of Synth) to the master, as well as the delay node
+    myNotes[note] = new Synth(ctx, note, velocity, adsrArray[articNum], filterArray[articNum]);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
+    myNotes[note].env.connect(master);      // connect the envelope (gain node of Synth) to the master
     myNotes[note].start(note, velocity);
     console.log("start");
 }
@@ -73,16 +123,24 @@ const artic4 = document.getElementById('artic4');
 // Add individual listeners
 artic1.addEventListener('click', () => {
   console.log('The notes will be slurred !');
+  articNum = 0;
+  console.log(articNum);
 });
 
 artic2.addEventListener('click', () => {
   console.log('The notes will be long and accented');
+  articNum = 1;
+  console.log(articNum);
 });
 
 artic3.addEventListener('click', () => {
   console.log('The notes will be short and stopped');
+  articNum = 2;
+  console.log(articNum);
 });
 
 artic4.addEventListener('click', () => {
   console.log('The notes will be short and off-the-string');
+  articNum = 3;
+  console.log(articNum);
 });
