@@ -7,17 +7,19 @@ const master = new GainNode(ctx);
 master.connect(ctx.destination);
 
 const myNotes = new Array(128);         // new notes are stored in an array where index = the midi note#
-const adsr = [0.2, 0.15, 0.4, 0.5];     // storing ADSR values in a new array
+const adsrArray = [0.2, 0.15, 0.4, 0.5];     // storing ADSR values in a new array
         // envelope attack time (sec)
         // decay time (sec)
         // sustain level (%of max gain)
         // release time (sec)
 
+const filterArray = new Array()
+
 const midi = new MIDIengine();
 
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
-    myNotes[note] = new Synth(ctx, note, velocity, adsr);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
+    myNotes[note] = new Synth(ctx, note, velocity, adsrArray);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
     myNotes[note].env.connect(master);      // connect the envelope (gain node of Synth) to the master, as well as the delay node
     myNotes[note].start(note, velocity);
     console.log("start");
