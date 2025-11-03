@@ -1,28 +1,35 @@
 // creating synth class
 export default class Synth {
-    constructor(ctx, midiNote, velocity, adsr) {
+    constructor(ctx, midiNote, velocity, adsr, filterEnv) {
         this.ctx = ctx;
         this.midiNote = midiNote;
         this.velocity = velocity;
         this.adsr = adsr;
+        this.filterEnv = filterEnv;
 
         this.osc = new OscillatorNode(this.ctx);                // new oscillator node for each new Synth
         this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
         this.osc.type = "square";
 
-        this.env = new GainNode(this.ctx);
-
+        this.ampEnv = new GainNode(this.ctx);
         this.maxGain = 0.2;      // maximum loudness (one note)
-        this.attack = adsr[0];   // envelope attack time (sec)
-        this.decay = adsr[1];    // decay time (sec)
-        this.sustain = adsr[2];  // sustain level
-        this.release = adsr[3];  // release time (sec)
+
+        // this.attack = adsr[0];   // envelope attack time (sec)
+        // this.decay = adsr[1];    // decay time (sec)
+        // this.sustain = adsr[2];  // sustain level
+        // this.release = adsr[3];  // release time (sec)
+
+        // this.breakpoint1 = filterEnv[0];    // each breakpoint is next cuttoff value for filter
+        // this.breakpoint2 = filterEnv[1];
+        // this.breakpoint3 = filterEnv[2];
+        // this.breakpoint4 = filterEnv[3];
+        
 
         this.filter = new BiquadFilterNode(this.ctx);
         this.filter.type = "lowpass";
         this.filter.frequency.value = 2000;
 
-        this.osc.connect(this.filter).connect(this.env);
+        this.osc.connect(this.filter).connect(this.ampEnv);
 
     }
     mtof() {
@@ -34,14 +41,25 @@ export default class Synth {
 
         //ADSR ramp !
         //reset the envelope...
-        this.env.gain.cancelScheduledValues(now);
-        this.env.gain.setValueAtTime(0, now); 
-        //attack stage --- ramp to the peakAmp value over attack duration 
-        this.env.gain.linearRampToValueAtTime(peakAmp, now + this.attack);
-        //decay stage --- ramp to the sustain value over attack + decay duration
-        this.env.gain.linearRampToValueAtTime(this.sustain * peakAmp, now + this.attack + this.decay);
+        this.ampEnv.gain.cancelScheduledValues(now);
+        this.ampEnv.gain.setValueAtTime(0, now); 
+        //iterate thru array --- ramp to the % of peakAmp value over duration 
+        for (let i=0; i < adsr.length - 1; i++) {
+        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * adsr[i][0], now + adsr[i][1]);
+        }
+       
+        //Filter cutoff envelope !
+        //reset the envelope...
+        this.filter.frequency.cancelScheduledValues(now);
+        this.filter.frequency.setValueAtTime(0, now); 
+        //iterate thru array --- ramp to the cutoff value over duration 
+        for (let i=0; i < filterEnv.length - 1; i++) {
+        this.filter.frequency.linearRampToValueAtTime(filterEnv[i][0], now + filterEnv[i][1]);
+        }
+        
         //start the oscillator
         this.osc.start(now);
+
     }
     stop() {
         const now = this.ctx.currentTime;
@@ -51,6 +69,10 @@ export default class Synth {
         this.env.gain.setValueAtTime(this.env.gain.value, now);
         //release stage --- ramp down to 0 amplitude over the release duration
         this.env.gain.linearRampToValueAtTime(0., now + this.release);
+
+        // release stage for filter envelope
+        this.filter.frequency.linearRampToValueAtTime(filterEnv[this.filterEnv.length][0], now + filterEnv[this.filterEnv.length][1]);
+
         //stop the oscillator
         this.osc.stop(now + this.release);
     }
