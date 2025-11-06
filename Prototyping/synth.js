@@ -13,16 +13,6 @@ export default class Synth {
 
         this.ampEnv = new GainNode(this.ctx);
         this.maxGain = 0.2;      // maximum loudness (one note)
-
-        // this.attack = adsr[0];   // envelope attack time (sec)
-        // this.decay = adsr[1];    // decay time (sec)
-        // this.sustain = adsr[2];  // sustain level
-        // this.release = adsr[3];  // release time (sec)
-
-        // this.breakpoint1 = filterEnv[0];    // each breakpoint is next cuttoff value for filter
-        // this.breakpoint2 = filterEnv[1];
-        // this.breakpoint3 = filterEnv[2];
-        // this.breakpoint4 = filterEnv[3];
         
 
         this.filter = new BiquadFilterNode(this.ctx);
@@ -44,7 +34,7 @@ export default class Synth {
         this.ampEnv.gain.cancelScheduledValues(now);
         this.ampEnv.gain.setValueAtTime(0, now); 
         //iterate thru array --- ramp to the % of peakAmp value over duration 
-        for (let i=0; i < adsr.length - 1; i++) {
+        for (let i=0; i < adsr.length - 2; i++) {
         this.ampEnv.gain.linearRampToValueAtTime(peakAmp * adsr[i][0], now + adsr[i][1]);
         }
        
@@ -53,7 +43,7 @@ export default class Synth {
         this.filter.frequency.cancelScheduledValues(now);
         this.filter.frequency.setValueAtTime(0, now); 
         //iterate thru array --- ramp to the cutoff value over duration 
-        for (let i=0; i < filterEnv.length - 1; i++) {
+        for (let i=0; i < filterEnv.length - 2; i++) {
         this.filter.frequency.linearRampToValueAtTime(filterEnv[i][0], now + filterEnv[i][1]);
         }
         
@@ -71,9 +61,9 @@ export default class Synth {
         this.env.gain.linearRampToValueAtTime(0., now + this.release);
 
         // release stage for filter envelope
-        this.filter.frequency.linearRampToValueAtTime(filterEnv[this.filterEnv.length][0], now + filterEnv[this.filterEnv.length][1]);
+        this.filter.frequency.linearRampToValueAtTime(filterEnv[this.filterEnv.length-1][0], now + filterEnv[this.filterEnv.length-1][1]);
 
         //stop the oscillator
-        this.osc.stop(now + this.release);
+        this.osc.stop(now + this.filterEnv.length-1);
     }
 }
