@@ -11,7 +11,7 @@ const myNotes = new Array(128);         // new notes are stored in an array wher
 const value = null
 const duration = null
 let articNum = 0
-const adsrArray = [
+const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
   [1, duration],
   [value, duration],
@@ -38,7 +38,7 @@ const adsrArray = [
   ]
 ];
         
-const filterArray = [
+const filterArray = [   // array of possible filter envelopes ; can be varying length
   [                     // filter envelope 1
   [1, duration],
   [value, duration],
@@ -80,10 +80,15 @@ midi.onNoteOff = (note) => {
 }
 
 // resumes the audio context when button clicks
-const button = document.querySelector('button');
-button.addEventListener('click', () => {
+const startButton = document.querySelector("#startButton");
+startButton.addEventListener('click', () => {
   ctx.resume();
   console.log("click!");
+})
+const stopButton = document.querySelector("#stopButton");
+stopButton.addEventListener('click', () => {
+  ctx.suspend();
+  console.log("clickz");
 })
 
 
