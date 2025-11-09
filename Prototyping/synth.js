@@ -9,7 +9,7 @@ export default class Synth {
 
         this.osc = new OscillatorNode(this.ctx);                // new oscillator node for each new Synth
         this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
-        this.osc.type = "square";
+        this.osc.type = "sawtooth";
 
         this.ampEnv = new GainNode(this.ctx);
         this.maxGain = 0.2;      // maximum loudness (one note)
