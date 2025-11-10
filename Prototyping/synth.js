@@ -1,3 +1,6 @@
+// importing Tone.js
+//import * as Tone from "https://unpkg.com/tone@next/build/Tone.js";
+
 // creating synth class
 export default class Synth {
     constructor(ctx, midiNote, velocity, adsr, filterEnv) {
@@ -11,6 +14,8 @@ export default class Synth {
         this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
         this.osc.type = "sawtooth";
 
+        //this.convolver = new Tone.Convolver("/Users/brannonrovins/Desktop/~ temple ~/programming for musicians/RovinsFinalProject.F25/Prototyping/IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
+
         this.ampEnv = new GainNode(this.ctx);
         this.maxGain = 0.2;      // maximum loudness (one note)
         
@@ -20,6 +25,7 @@ export default class Synth {
         this.filter.frequency.value = 2000;
 
         this.osc.connect(this.filter).connect(this.ampEnv);
+        //this.osc.connect(this.convolver).connect(this.filter).connect(this.ampEnv);
 
     }
     mtof() {
@@ -49,6 +55,7 @@ export default class Synth {
         
         //start the oscillator
         this.osc.start(now);
+        // Tone.start(); // ensures audio context is resumed
 
     }
     stop() {
