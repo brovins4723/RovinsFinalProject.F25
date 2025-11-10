@@ -1,5 +1,5 @@
 // importing Tone.js
-//import Tone from "https://unpkg.com/tone@next/build/Tone.js";
+import Tone from "https://unpkg.com/tone@next/build/Tone.js";
 
 // creating synth class
 export default class Synth {
@@ -14,7 +14,7 @@ export default class Synth {
         this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
         this.osc.type = "sawtooth";
 
-        //this.convolver = new Tone.Convolver("/Users/brannonrovins/Desktop/~ temple ~/programming for musicians/RovinsFinalProject.F25/Prototyping/IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
+        this.convolver = new Tone.Convolver("Prototyping/IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
 
         this.ampEnv = new GainNode(this.ctx);
         this.maxGain = 0.2;      // maximum loudness (one note)
@@ -24,8 +24,8 @@ export default class Synth {
         this.filter.type = "lowpass";
         this.filter.frequency.value = 2000;
 
-        this.osc.connect(this.filter).connect(this.ampEnv);
-        //this.osc.connect(this.convolver).connect(this.filter).connect(this.ampEnv);
+        //this.osc.connect(this.filter).connect(this.ampEnv);
+        this.osc.connect(this.convolver).connect(this.filter).connect(this.ampEnv);
 
     }
     mtof() {
@@ -43,7 +43,7 @@ export default class Synth {
         this.ampEnv.gain.setValueAtTime(0, now); 
         // iterate thru array --- ramp to the % of peakAmp value over duration 
         // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.adsr.length - 2; i++) {
+        for (let i=0; i < this.adsr.length - 1; i++) {
         this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], tAmp);
         tAmp += this.adsr[i][1]
         }
@@ -56,7 +56,7 @@ export default class Synth {
         this.filter.frequency.setValueAtTime(0, now); 
         // iterate thru array --- ramp to the cutoff value over duration 
         // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.filterEnv.length - 2; i++) {
+        for (let i=0; i < this.filterEnv.length - 1; i++) {
         this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], tFilt);
         tFilt += this.filterEnv[i][1];
         }     
