@@ -1,6 +1,4 @@
 // importing Tone.js
-import Tone from "https://unpkg.com/tone@next/build/Tone.js";
-
 // creating synth class
 export default class Synth {
     constructor(ctx, midiNote, velocity, adsr, filterEnv) {
@@ -10,26 +8,30 @@ export default class Synth {
         this.adsr = adsr;
         this.filterEnv = filterEnv;
 
-        this.osc = new OscillatorNode(this.ctx);                // new oscillator node for each new Synth
-        this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
-        this.osc.type = "sawtooth";
+        // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
 
-        this.convolver = new Tone.Convolver("Prototyping/IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
+        // this.osc = new OscillatorNode(this.ctx);                // new oscillator node for each new Synth
+        // this.osc.frequency.value = this.mtof(this.midiNote);    // converting midi note input to frequency
+        // this.osc.type = "sawtooth";
 
-        this.ampEnv = new GainNode(this.ctx);
-        this.maxGain = 0.2;      // maximum loudness (one note)
-        
+        // this.ampEnv = new GainNode(this.ctx);
+        // this.maxGain = 0.2;      // maximum loudness (one note)
+        // this.filter = new BiquadFilterNode(this.ctx);
+        // this.filter.type = "lowpass";
+        // this.filter.frequency.value = 2000;
+        // --- --- ---
 
-        this.filter = new BiquadFilterNode(this.ctx);
-        this.filter.type = "lowpass";
-        this.filter.frequency.value = 2000;
+        this.osc = new Tone.Oscillator(this.mtof(this.midiNote), "sawtooth");
+        this.filter = new Tone.Filter(2000, "lowpass");
+        this.ampEnv = new Tone.Gain(0.2);
+        this.convolver = new Tone.Convolver("IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
 
         //this.osc.connect(this.filter).connect(this.ampEnv);
         this.osc.connect(this.convolver).connect(this.filter).connect(this.ampEnv);
 
     }
-    mtof() {
-        return 440 * 2 ** ((this.midiNote-69)/12);
+    mtof(midiNote) {
+        return 440 * 2 ** ((midiNote-69)/12);
     }
     start(midiNote, velocity) {
         const now = this.ctx.currentTime;
