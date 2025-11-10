@@ -36,22 +36,30 @@ export default class Synth {
         const peakAmp = velocity/127 * this.maxGain;    // using velocity of each note to calculate percent of max gain
 
         //ADSR ramp !
+        //running time variable for Amplitude
+        let tAmp = now;
         //reset the envelope...
         this.ampEnv.gain.cancelScheduledValues(now);
         this.ampEnv.gain.setValueAtTime(0, now); 
-        //iterate thru array --- ramp to the % of peakAmp value over duration 
+        // iterate thru array --- ramp to the % of peakAmp value over duration 
+        // release stage is handled by synth.stop(), only up to the second to last element in array
         for (let i=0; i < this.adsr.length - 2; i++) {
-        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], now + this.adsr[i][1]);
+        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], tAmp);
+        tAmp += this.adsr[i][1]
         }
        
         //Filter cutoff envelope !
+        //running time variable for Filter
+        let tFilt = now;
         //reset the envelope...
         this.filter.frequency.cancelScheduledValues(now);
         this.filter.frequency.setValueAtTime(0, now); 
-        //iterate thru array --- ramp to the cutoff value over duration 
+        // iterate thru array --- ramp to the cutoff value over duration 
+        // release stage is handled by synth.stop(), only up to the second to last element in array
         for (let i=0; i < this.filterEnv.length - 2; i++) {
-        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], now + this.filterEnv[i][1]);
-        }
+        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], tFilt);
+        tFilt += this.filterEnv[i][1];
+        }     
         
         //start the oscillator
         this.osc.start(now);
