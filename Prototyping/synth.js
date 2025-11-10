@@ -71,6 +71,6 @@ export default class Synth {
         this.filter.frequency.linearRampToValueAtTime(this.filterEnv[this.filterEnv.length-1][0], now + this.filterEnv[this.filterEnv.length-1][1]);
 
         //stop the oscillator
-        this.osc.stop(now + this.adsr[this.adsr.length-2][1]);
+        this.osc.stop(now + this.adsr[this.adsr.length-1][1]);
     }
 }
