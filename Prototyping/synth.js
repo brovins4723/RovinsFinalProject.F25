@@ -1,5 +1,5 @@
 // importing Tone.js
-//import * as Tone from "https://unpkg.com/tone@next/build/Tone.js";
+//import Tone from "https://unpkg.com/tone@next/build/Tone.js";
 
 // creating synth class
 export default class Synth {
@@ -40,8 +40,8 @@ export default class Synth {
         this.ampEnv.gain.cancelScheduledValues(now);
         this.ampEnv.gain.setValueAtTime(0, now); 
         //iterate thru array --- ramp to the % of peakAmp value over duration 
-        for (let i=0; i < adsr.length - 2; i++) {
-        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * adsr[i][0], now + adsr[i][1]);
+        for (let i=0; i < this.adsr.length - 2; i++) {
+        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], now + this.adsr[i][1]);
         }
        
         //Filter cutoff envelope !
@@ -49,8 +49,8 @@ export default class Synth {
         this.filter.frequency.cancelScheduledValues(now);
         this.filter.frequency.setValueAtTime(0, now); 
         //iterate thru array --- ramp to the cutoff value over duration 
-        for (let i=0; i < filterEnv.length - 2; i++) {
-        this.filter.frequency.linearRampToValueAtTime(filterEnv[i][0], now + filterEnv[i][1]);
+        for (let i=0; i < this.filterEnv.length - 2; i++) {
+        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], now + this.filterEnv[i][1]);
         }
         
         //start the oscillator
@@ -62,15 +62,15 @@ export default class Synth {
         const now = this.ctx.currentTime;
 
         //reset the envelope...
-        this.env.gain.cancelScheduledValues(now);
-        this.env.gain.setValueAtTime(this.env.gain.value, now);
+        this.ampEnv.gain.cancelScheduledValues(now);
+        this.ampEnv.gain.setValueAtTime(this.ampEnv.gain.value, now);
         //release stage --- ramp down to 0 amplitude over the release duration
-        this.env.gain.linearRampToValueAtTime(0., now + this.release);
+        this.ampEnv.gain.linearRampToValueAtTime(this.adsr[this.adsr.length-1][0], now + this.adsr[this.adsr.length-1][1]);
 
         // release stage for filter envelope
-        this.filter.frequency.linearRampToValueAtTime(filterEnv[this.filterEnv.length-1][0], now + filterEnv[this.filterEnv.length-1][1]);
+        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[this.filterEnv.length-1][0], now + this.filterEnv[this.filterEnv.length-1][1]);
 
         //stop the oscillator
-        this.osc.stop(now + this.filterEnv.length-1);
+        this.osc.stop(now + this.adsr[this.adsr.length-2][1]);
     }
 }
