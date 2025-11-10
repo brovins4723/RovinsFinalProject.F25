@@ -13,10 +13,10 @@ const duration = null
 let articNum = 0
 const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
+  [1, 0.5],
+  [0.2, 0.3],
+  [0.2, 0.2],
+  [0, 0.2],
   ],
   [                     // amp envelope 2
   [1, duration],
