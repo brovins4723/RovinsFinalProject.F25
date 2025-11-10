@@ -13,10 +13,9 @@ const duration = null
 let articNum = 0
 const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
-  [1, 0.5],
-  [0.2, 0.3],
-  [0.2, 0.2],
-  [0, 0.2],
+  [0.8, 0.2],
+  [0.4, 0.15],
+  [0, 0.4],
   ],
   [                     // amp envelope 2
   [1, duration],
@@ -40,10 +39,8 @@ const adsrArray = [     // array of possible amplitude envelopes ; can be varyin
         
 const filterArray = [   // array of possible filter envelopes ; can be varying length
   [                     // filter envelope 1
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
+  [2000, 0.5],
+  [2000, 0.5]
   ],
   [                     // filter envelope 2
   [1, duration],
@@ -70,7 +67,7 @@ const midi = new MIDIengine();
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
     myNotes[note] = new Synth(ctx, note, velocity, adsrArray[articNum], filterArray[articNum]);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
-    myNotes[note].env.connect(master);      // connect the envelope (gain node of Synth) to the master
+    myNotes[note].ampEnv.connect(master);      // connect the envelope (gain node of Synth) to the master
     myNotes[note].start(note, velocity);
     console.log("start");
 }
