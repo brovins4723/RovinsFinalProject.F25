@@ -15,19 +15,22 @@ export default class Synth {
         // this.osc.type = "sawtooth";
 
         // this.ampEnv = new GainNode(this.ctx);
-        // this.maxGain = 0.2;      // maximum loudness (one note)
+        this.maxGain = 0.2;      // maximum loudness (one note)
         // this.filter = new BiquadFilterNode(this.ctx);
         // this.filter.type = "lowpass";
         // this.filter.frequency.value = 2000;
         // --- --- ---
 
+        Tone.setContext(this.ctx);
+
         this.osc = new Tone.Oscillator(this.mtof(this.midiNote), "sawtooth");
-        this.filter = new Tone.Filter(2000, "lowpass");
-        this.ampEnv = new Tone.Gain(0.2);
         this.convolver = new Tone.Convolver("IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
+        this.filter = new Tone.Filter(2000, "lowpass");
+        this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
         //this.osc.connect(this.filter).connect(this.ampEnv);
-        this.osc.connect(this.convolver).connect(this.filter).connect(this.ampEnv);
+        this.osc.connect(this.convolver).connect(this.filter);
+        Tone.connect(this.filter, this.ampEnv);
 
     }
     mtof(midiNote) {
