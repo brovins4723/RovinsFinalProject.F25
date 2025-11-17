@@ -1,0 +1,5 @@
+Develoopment Log 2 (more research)
+
+I sorted out some of the issues with my code from last week and the framework for filtering and amplitude envelope is working properly with just a stock sawtooth waveform. I've also gotten the convolver node working with tone.js. However, I'm finding that the convolved sawtooth wave doesn't sound all that interesting... the violin body resonance is barely noticeable. I realized that the effect would be much more convincing if the waveform was convolved with a sample of a violin. This could be an interesting path to explore, but the string sound itself wasn't the MAIN focus for this synth. I decided to dive back into working on the articulations.
+
+This week I went back into research mode, looking for data on formants present in stringed instruments, which resonant frequencies are emphasized most during short notes vs. connnected notes vs. accented notes, etc. 
