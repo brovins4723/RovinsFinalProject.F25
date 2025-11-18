@@ -25,7 +25,7 @@ export default class Synth {
 
         this.osc = new Tone.Oscillator(this.mtof(this.midiNote), "sawtooth");
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
-        this.convolver.wet.value = 1;
+       // this.convolver.wet.value = 1.;
         this.filter = new Tone.Filter(2000, "lowpass");
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
