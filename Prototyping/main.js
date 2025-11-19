@@ -11,6 +11,8 @@ const myNotes = new Array(128);         // new notes are stored in an array wher
 const value = null
 const duration = null
 let articNum = 0
+let dynamicNum = 1
+let vibratoAmount = 0
 const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
   [0.8, 0.2],
@@ -113,6 +115,9 @@ document.querySelector("#releaseSlider").addEventListener("input", (event)=>{
 document.querySelector("#masterGain").addEventListener("input", (event)=>{
     document.querySelector("#masterGainValue").textContent = `${event.target.value}`
     master.gain.value = Number(event.target.value);
+document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
+    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
+    vibratoAmount = Number(event.target.value);
 })
 
 // --- --- --- articulation selector buttonz
@@ -120,6 +125,10 @@ const artic1 = document.getElementById('artic1');
 const artic2 = document.getElementById('artic2');
 const artic3 = document.getElementById('artic3');
 const artic4 = document.getElementById('artic4');
+const artic5 = document.getElementById('artic5');
+const dynamic1 = document.getElementById('dynamic1');
+const dynamic2 = document.getElementById('dynamic2');
+const dynamic3 = document.getElementById('dynamic3');
 
 
 // Add individual listeners
@@ -146,3 +155,25 @@ artic4.addEventListener('click', () => {
   articNum = 3;
   console.log(articNum);
 });
+
+artic5.addEventListener('click', () => {
+  console.log('The notes will be slurred !');
+  articNum = 4;
+  console.log(articNum);
+});
+
+dynamic1.addEventListener('click', () => {
+  dynamicNum = 0;
+  console.log(dynamicNum);
+});
+
+dynamic2.addEventListener('click', () => {
+  dynamicNum = 1;
+  console.log(dynamicNum);
+});
+
+dynamic3.addEventListener('click', () => {
+  dynamicNum = 2;
+  console.log(dynamicNum);
+}); 
+
