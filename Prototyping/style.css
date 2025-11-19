@@ -1,9 +1,30 @@
 /* this is a CSS comment*/
 
+.slider-container {
+  position: fixed;        /* stays in place when scrolling */
+  left: 10px;            /* distance from right edge */
+  top: 30%;               
+  transform: translateY(-50%);
+  
+  display: flex;
+  flex-direction: column;    
+  gap: 20px;              /* space between buttons */
+}
+
 .button-container {
   position: fixed;        /* stays in place when scrolling */
-  right: 90px;            /* distance from right edge */
+  right: 360px;            /* distance from right edge */
   top: 10%;               
+  transform: translateY(-50%);
+  
+  display: flex;
+  flex-direction: row;    
+  gap: 30px;              /* space between buttons */
+}
+.button-container2 {
+  position: fixed;        /* stays in place when scrolling */
+  right: 500px;            /* distance from right edge */
+  top: 20%;               
   transform: translateY(-50%);
   
   display: flex;
