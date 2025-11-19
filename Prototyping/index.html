@@ -12,13 +12,19 @@
     <button id="stopButton">Stop audio</button>
 
 <div class="button-container">
-  <button id="artic1" button class="control-btn">Articulation1</button>
-  <button id="artic2" class="control-btn">Articulation2</button>
-  <button id="artic3" class="control-btn">Articulation3</button>
-  <button id="artic4" class="control-btn">Articulation4</button>
+  <button id="artic1" button class="control-btn">Legato</button>
+  <button id="artic2" button class="control-btn">Staccato</button>
+  <button id="artic3" button class="control-btn">Spiccato</button>
+  <button id="artic4" button class="control-btn">Sforzando</button>
+  <button id="artic5" button class="control-btn">Slurred</button>
+</div>
+<div class="button-container2">
+  <button id="dynamic1" class="control-btn">pp</button>
+  <button id="dynamic2" class="control-btn">mf</button>
+  <button id="dynamic3" class="control-btn">ff</button>
 </div>
 
-    <div id="adsrStuff">
+    <!-- <div id="adsrStuff">
     <h3>ADSR</h3>
         <label for="attackSlider">Attack</label>
         <input type="range" id="attackSlider" min="0.02" max="2" step="0.01" value="0.02">
@@ -38,12 +44,16 @@
         <label for="releaseSlider">Release</label>
         <input type="range" id="releaseSlider" min="0.02" max="2" step="0.01" value="0.5">
         <label for="releaseSlider" id="releaseValue">0.5 sec</label>
-    </div>
+    </div> -->
    
-
+<div class="slider-container">
+    <div id="vibrato">
+    <label for="vibratoAmount">VibratoAmount</label>
+        <input type="range" id="vibratoAmou t" min="0.02" max="0.99" step="0.01" value="0.5">
+        <label for="vibratoAmount" id="vibratoAmountValue">0.5</label>
+    </div>
     <div id="master">
-    <h3>Gain</h3>
-        <label for="masterGain">MasterGain</label>
+    <label for="masterGain">MasterGain</label>
         <input type="range" id="masterGain" min="0.02" max="0.99" step="0.01" value="0.5">
         <label for="masterGain" id="masterGainValue">0.5</label>
     </div>
