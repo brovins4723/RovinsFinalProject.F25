@@ -24,8 +24,12 @@ export default class Synth {
         Tone.setContext(this.ctx);
 
         this.osc = new Tone.Oscillator(this.mtof(this.midiNote), "sawtooth");
+        this.osc1 = new Tone.Oscillator(this.mtof(this.midiNote+0.1), "sawtooth");
+        this.osc2 = new Tone.Oscillator(this.mtof(this.midiNote-0.1), "sawtooth");
+        this.osc3 = new Tone.Oscillator(this.mtof(this.midiNote-0.3), "sawtooth");
+
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
-       // this.convolver.wet.value = 1.;
+        this.convolver.wet = 1.;
         this.filter = new Tone.Filter(2000, "lowpass");
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
@@ -53,7 +57,7 @@ export default class Synth {
         for (let i=0; i < this.adsr.length - 1; i++) {
         this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], tAmp);
         tAmp += this.adsr[i][1]
-        }
+        };
        
         //Filter cutoff envelope !
         //running time variable for Filter
@@ -66,7 +70,7 @@ export default class Synth {
         for (let i=0; i < this.filterEnv.length - 1; i++) {
         this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], tFilt);
         tFilt += this.filterEnv[i][1];
-        }     
+        };  
         
         //start the oscillator
         this.osc.start(now);
