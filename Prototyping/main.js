@@ -10,9 +10,9 @@ const myNotes = new Array(128);         // new notes are stored in an array wher
 
 const value = null
 const duration = null
-let articNum = 0
-let dynamicNum = 1
-let vibratoAmount = 0
+let articNum = 0;
+let dynamicNum = 1;
+let vibratoAmount = 0;
 const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
   [0.8, 0.2],
@@ -93,32 +93,33 @@ stopButton.addEventListener('click', () => {
 
 // --- --- ---sliders for all ADSR parameters, when slider value changes it updates the elements in ADSR array
 
-document.querySelector("#attackSlider").addEventListener("input", (event)=>{
-    document.querySelector("#attackValue").textContent = `${event.target.value} sec`
-    adsr[0] = Number(event.target.value);
-})
-document.querySelector("#decaySlider").addEventListener("input", (event)=>{
-    document.querySelector("#decayValue").textContent = `${event.target.value} sec`
-    adsr[1] = Number(event.target.value);
-})
-document.querySelector("#sustainSlider").addEventListener("input", (event)=>{
-    document.querySelector("#sustainValue").textContent = `${event.target.value}`
-    adsr[2] = Number(event.target.value);
-})
-document.querySelector("#releaseSlider").addEventListener("input", (event)=>{
-    document.querySelector("#releaseValue").textContent = `${event.target.value} sec`
-    adsr[3] = Number(event.target.value);
-})
+// document.querySelector("#attackSlider").addEventListener("input", (event)=>{
+//     document.querySelector("#attackValue").textContent = `${event.target.value} sec`
+//     adsr[0] = Number(event.target.value);
+// })
+// document.querySelector("#decaySlider").addEventListener("input", (event)=>{
+//     document.querySelector("#decayValue").textContent = `${event.target.value} sec`
+//     adsr[1] = Number(event.target.value);
+// })
+// document.querySelector("#sustainSlider").addEventListener("input", (event)=>{
+//     document.querySelector("#sustainValue").textContent = `${event.target.value}`
+//     adsr[2] = Number(event.target.value);
+// })
+// document.querySelector("#releaseSlider").addEventListener("input", (event)=>{
+//     document.querySelector("#releaseValue").textContent = `${event.target.value} sec`
+//     adsr[3] = Number(event.target.value);
+// })
 
 
 // --- --- --- also master gain slider
 document.querySelector("#masterGain").addEventListener("input", (event)=>{
     document.querySelector("#masterGainValue").textContent = `${event.target.value}`
     master.gain.value = Number(event.target.value);
+});
 document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
     document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
     vibratoAmount = Number(event.target.value);
-})
+});
 
 // --- --- --- articulation selector buttonz
 const artic1 = document.getElementById('artic1');
@@ -175,5 +176,4 @@ dynamic2.addEventListener('click', () => {
 dynamic3.addEventListener('click', () => {
   dynamicNum = 2;
   console.log(dynamicNum);
-}); 
-
+});
