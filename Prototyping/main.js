@@ -68,7 +68,7 @@ const midi = new MIDIengine();
 
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
-    myNotes[note] = new Synth(ctx, note, velocity, adsrArray[articNum], filterArray[articNum]);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
+    myNotes[note] = new Synth(ctx, note, velocity, adsrArray[articNum], filterArray[articNum], vibratoAmount);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
     myNotes[note].ampEnv.connect(master);      // connect the envelope (gain node of Synth) to the master
     myNotes[note].start(note, velocity);
     console.log("start");
