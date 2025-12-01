@@ -1,12 +1,13 @@
 // importing Tone.js
 // creating synth class
 export default class Synth {
-    constructor(ctx, midiNote, velocity, adsr, filterEnv) {
+    constructor(ctx, midiNote, velocity, adsr, filterEnv, vibAmount) {
         this.ctx = ctx;
         this.midiNote = midiNote;
         this.velocity = velocity;
         this.adsr = adsr;
         this.filterEnv = filterEnv;
+        this.vibAmount = vibAmount
 
         this.maxGain = 0.2;      // maximum loudness (one note)
 
@@ -26,11 +27,13 @@ export default class Synth {
             frequency: 4,     // vibrato rate
             amplitude: 15,    // vibrato width (in cents)(10-25cents)
         });
-        // Connect LFO to the oscillator freq value
+         // Connect LFO to the oscillator freq value
         this.vibLFO.connect(this.osc.detune);
-
         // Start LFO immediately (does it need to happen in the start method?)(no! it should be running continuously!)
         this.vibLFO.start();
+
+       
+
 
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
         this.convolver.wet = 1.;
@@ -39,11 +42,12 @@ export default class Synth {
 
         this.osc.connect(this.convolver).connect(this.filter);
         Tone.connect(this.filter, this.ampEnv);
-
     }
+
     mtof(midiNote) {
         return 440 * 2 ** ((midiNote-69)/12);
     }
+
     start(midiNote, velocity) {
         const now = this.ctx.currentTime;
         const peakAmp = velocity/127 * this.maxGain;    // using velocity of each note to calculate percent of max gain
