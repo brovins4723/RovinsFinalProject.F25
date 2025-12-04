@@ -13,62 +13,35 @@ const duration = null
 let articNum = 0;
 let dynamicNum = 1;
 let vibratoAmount = 0;
-const adsrArray = [     // array of possible amplitude envelopes ; can be varying length
+const envArray = [     // array of possible amplitude envelopes ; can be varying length
   [                     // amp envelope 1
-  [0.8, 0.2],
-  [0.4, 0.15],
-  [0, 0.4],
+  [0.8, 800, 3000, 0.2],
+  [0.4, 800, 3000, 0.15],
+  [0, 800, 3000, 0.4],
   ],
   [                     // amp envelope 2
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
+  [0.8, 800, 3000, 0.2],
+  [0.4, 800, 3000, 0.15],
+  [0, 800, 3000, 0.4],
   ],
   [                     // amp envelope 3
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
+  [0.8, 800, 3000, 0.2],
+  [0.4, 800, 3000, 0.15],
+  [0, 800, 3000, 0.4],
   ],
   [                     // amp envelope 4
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
+  [0.8, 800, 3000, 0.2],
+  [0.4, 800, 3000, 0.15],
+  [0, 800, 3000, 0.4],
   ]
 ];
-        
-const filterArray = [   // array of possible filter envelopes ; can be varying length
-  [                     // filter envelope 1
-  [2000, 0.5],
-  [2000, 0.5]
-  ],
-  [                     // filter envelope 2
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
-  ],
-  [                     // filter envelope 3
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
-  ],
-  [                     // filter envelope 4
-  [1, duration],
-  [value, duration],
-  [value, duration],
-  [value, duration],
-  ]
-];
+
 
 const midi = new MIDIengine();
 
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
-    myNotes[note] = new Synth(ctx, note, velocity, adsrArray[articNum], filterArray[articNum], vibratoAmount);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
+    myNotes[note] = new Synth(ctx, note, velocity, envArray[articNum], vibratoAmount);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
     myNotes[note].ampEnv.connect(master);      // connect the envelope (gain node of Synth) to the master
     myNotes[note].start(note, velocity);
     console.log("start");
@@ -89,26 +62,6 @@ stopButton.addEventListener('click', () => {
   ctx.suspend();
   console.log("clickz");
 })
-
-
-// --- --- ---sliders for all ADSR parameters, when slider value changes it updates the elements in ADSR array
-
-// document.querySelector("#attackSlider").addEventListener("input", (event)=>{
-//     document.querySelector("#attackValue").textContent = `${event.target.value} sec`
-//     adsr[0] = Number(event.target.value);
-// })
-// document.querySelector("#decaySlider").addEventListener("input", (event)=>{
-//     document.querySelector("#decayValue").textContent = `${event.target.value} sec`
-//     adsr[1] = Number(event.target.value);
-// })
-// document.querySelector("#sustainSlider").addEventListener("input", (event)=>{
-//     document.querySelector("#sustainValue").textContent = `${event.target.value}`
-//     adsr[2] = Number(event.target.value);
-// })
-// document.querySelector("#releaseSlider").addEventListener("input", (event)=>{
-//     document.querySelector("#releaseValue").textContent = `${event.target.value} sec`
-//     adsr[3] = Number(event.target.value);
-// })
 
 
 // --- --- --- also master gain slider
