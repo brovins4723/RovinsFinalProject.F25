@@ -1,18 +1,16 @@
 // importing Tone.js
 // creating synth class
 export default class Synth {
-    constructor(ctx, midiNote, velocity, adsr, filterEnv, vibAmount) {
+    constructor(ctx, midiNote, velocity, envArray, vibAmount) {
         this.ctx = ctx;
         this.midiNote = midiNote;
         this.velocity = velocity;
-        this.adsr = adsr;
-        this.filterEnv = filterEnv;
-        this.vibAmount = vibAmount
+        this.envArray = envArray; //contains both amplitude and filter envelopes
 
         this.maxGain = 0.2;      // maximum loudness (one note)
-
+        //this.vibAmount = vibAmount
+        
         // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
-   
         // --- --- ---
 
         Tone.setContext(this.ctx);
@@ -24,24 +22,28 @@ export default class Synth {
         // this.osc3 = new Tone.Oscillator(this.mtof(this.midiNote-0.3), "sawtooth");
 
         this.vibLFO = new Tone.LFO({
-            frequency: 4,     // vibrato rate
-            amplitude: 15,    // vibrato width (in cents)(10-25cents)
+            frequency: 4,       // vibrato rate
+            min: -vibAmount,           // vibrato depth (in cents)
+            max: +vibAmount,           // vibrato depth (in cents)
+            amplitude: 1       
         });
-         // Connect LFO to the oscillator freq value
+        // Connect LFO to the oscillator freq value
         this.vibLFO.connect(this.osc.detune);
         // Start LFO immediately (does it need to happen in the start method?)(no! it should be running continuously!)
         this.vibLFO.start();
 
-       
-
-
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
         this.convolver.wet = 1.;
-        this.filter = new Tone.Filter(2000, "lowpass");
+        this.filter1 = new Tone.Filter(800, "peaking");
+        this.filter2 = new Tone.Filter(3000, "peaking");
+
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
-        this.osc.connect(this.convolver).connect(this.filter);
-        Tone.connect(this.filter, this.ampEnv);
+        this.osc.connect(this.convolver).connect(this.filter1);
+        this.convolver.connect(this.filter2);
+        Tone.connect(this.filter1, this.ampEnv);
+        Tone.connect(this.filter2, this.ampEnv);
+
     }
 
     mtof(midiNote) {
@@ -60,23 +62,33 @@ export default class Synth {
         this.ampEnv.gain.setValueAtTime(0, now); 
         // iterate thru array --- ramp to the % of peakAmp value over duration 
         // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.adsr.length - 1; i++) {
-        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.adsr[i][0], tAmp);
-        tAmp += this.adsr[i][1]
+        for (let i=0; i < this.envArray.length - 1; i++) {
+        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.envArray[i][0], tAmp);
+        tAmp += this.envArray[i][3]
         };
        
-        //Filter cutoff envelope !
-        //running time variable for Filter
-        let tFilt = now;
+        //Filter center freq envelope !
+        //running time variable for Filter1
+        let tFilt1 = now;
         //reset the envelope...
-        this.filter.frequency.cancelScheduledValues(now);
-        this.filter.frequency.setValueAtTime(0, now); 
+        this.filter1.frequency.cancelScheduledValues(now);
         // iterate thru array --- ramp to the cutoff value over duration 
         // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.filterEnv.length - 1; i++) {
-        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[i][0], tFilt);
-        tFilt += this.filterEnv[i][1];
+        for (let i=0; i < this.envArray.length - 1; i++) {
+        this.filter1.frequency.linearRampToValueAtTime(this.envArray[i][1], tFilt1);
+        tFilt1 += this.envArray[i][3];
         };  
+
+        //running time variable for Filter2
+        let tFilt2 = now;
+        //reset the envelope...
+        this.filter2.frequency.cancelScheduledValues(now);
+        // iterate thru array --- ramp to the cutoff value over duration 
+        // release stage is handled by synth.stop(), only up to the second to last element in array
+        for (let i=0; i < this.envArray.length - 1; i++) {
+        this.filter2.frequency.linearRampToValueAtTime(this.envArray[i][2], tFilt2);
+        tFilt2 += this.envArray[i][3];
+        };
         
         //start the oscillator
         this.osc.start(now);
@@ -90,12 +102,13 @@ export default class Synth {
         this.ampEnv.gain.cancelScheduledValues(now);
         this.ampEnv.gain.setValueAtTime(this.ampEnv.gain.value, now);
         //release stage --- ramp down to 0 amplitude over the release duration
-        this.ampEnv.gain.linearRampToValueAtTime(this.adsr[this.adsr.length-1][0], now + this.adsr[this.adsr.length-1][1]);
+        this.ampEnv.gain.linearRampToValueAtTime(this.envArray[this.envArray.length-1][0], now + this.envArray[this.envArray.length-1][3]);
 
         // release stage for filter envelope
-        this.filter.frequency.linearRampToValueAtTime(this.filterEnv[this.filterEnv.length-1][0], now + this.filterEnv[this.filterEnv.length-1][1]);
+        this.filter1.frequency.linearRampToValueAtTime(this.envArray[this.envArray.length-1][1], now + this.envArray[this.envArray.length-1][3]);
+        this.filter2.frequency.linearRampToValueAtTime(this.envArray[this.envArray.length-1][2], now + this.envArray[this.envArray.length-1][3]);
 
         //stop the oscillator
-        this.osc.stop(now + this.adsr[this.adsr.length-1][1]);
+        this.osc.stop(now + this.envArray[this.envArray.length-1][3]);
     }
 };
