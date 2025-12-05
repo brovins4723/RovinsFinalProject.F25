@@ -1,17 +1,24 @@
 // importing Tone.js
 // creating synth class
 export default class Synth {
-    constructor(ctx, midiNote, velocity, envArray, vibAmount) {
+    constructor(ctx, midiNote, velocity, envArray, vibrato) {
         this.ctx = ctx;
         this.midiNote = midiNote;
         this.velocity = velocity;
         this.envArray = envArray; //contains both amplitude and filter envelopes
 
         this.maxGain = 0.2;      // maximum loudness (one note)
-        //this.vibAmount = vibAmount
-        
         // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
         // --- --- ---
+
+    this.vibAmount = vibrato;
+    document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
+    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
+        this.vibAmount = Number(event.target.value);
+        this.vibLFO.max = this.vibAmount;
+        this.vibLFO.min = -this.vibAmount;
+        this.vibLFO.frequency.value = 4 + ((0.1*Number(event.target.value))/2); 
+    });
 
         Tone.setContext(this.ctx);
         this.freq = this.mtof(this.midiNote)
@@ -23,14 +30,16 @@ export default class Synth {
 
         this.vibLFO = new Tone.LFO({
             frequency: 4,       // vibrato rate
-            min: -vibAmount,           // vibrato depth (in cents)
-            max: +vibAmount,           // vibrato depth (in cents)
+            min: -this.vibAmount,           // vibrato depth (in cents)
+            max: +this.vibAmount,           // vibrato depth (in cents)
             amplitude: 1       
         });
-        // Connect LFO to the oscillator freq value
-        this.vibLFO.connect(this.osc.detune);
+       
         // Start LFO immediately (does it need to happen in the start method?)(no! it should be running continuously!)
         this.vibLFO.start();
+       
+        // Connect LFO to the oscillator freq value  
+        this.vibLFO.connect(this.osc.detune);
 
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
         this.convolver.wet = 1.;
