@@ -3,7 +3,7 @@ import MIDIengine from "./midi.js";
 import Synth from "./synth.js";
 
 const ctx = new AudioContext();
-const master = new GainNode(ctx);
+const master = new GainNode(ctx).gain.value = 0.5;
 master.connect(ctx.destination);
 
 const myNotes = new Array(128);         // new notes are stored in an array where index = the midi note#
@@ -33,15 +33,26 @@ const envArray = [     // array of possible amplitude envelopes ; can be varying
   [0.8, 800, 3000, 0.2],
   [0.4, 800, 3000, 0.15],
   [0, 800, 3000, 0.4],
+  ],
+  [                     // amp envelope 5
+  [0.8, 800, 3000, 0.2],
+  [0.4, 800, 3000, 0.15],
+  [0, 800, 3000, 0.4],
   ]
 ];
 
+    let vibAmount = 0;
+       
+    document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
+    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
+      vibAmount = Number(event.target.value);
+    });
 
 const midi = new MIDIengine();
 
 // paramaters note and velocity for starting a new note
 midi.onNoteOn = (note, velocity) => {
-    myNotes[note] = new Synth(ctx, note, velocity, envArray[articNum], vibratoAmount);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
+    myNotes[note] = new Synth(ctx, note, velocity, envArray[articNum], vibAmount);   // passing note and velocity as parameters for a new synth note... also using the ADSR array as a parameter
     myNotes[note].ampEnv.connect(master);      // connect the envelope (gain node of Synth) to the master
     myNotes[note].start(note, velocity);
     console.log("start");
@@ -69,10 +80,10 @@ document.querySelector("#masterGain").addEventListener("input", (event)=>{
     document.querySelector("#masterGainValue").textContent = `${event.target.value}`
     master.gain.value = Number(event.target.value);
 });
-document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
-    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
-    vibratoAmount = Number(event.target.value);
-});
+// document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
+//     document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
+//     vibratoAmount = Number(event.target.value);
+// });
 
 // --- --- --- articulation selector buttonz
 const artic1 = document.getElementById('artic1');
