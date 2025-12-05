@@ -3,7 +3,8 @@ import MIDIengine from "./midi.js";
 import Synth from "./synth.js";
 
 const ctx = new AudioContext();
-const master = new GainNode(ctx).gain.value = 0.5;
+const master = new GainNode(ctx)
+master.gain.value = 0.5;
 master.connect(ctx.destination);
 
 const myNotes = new Array(128);         // new notes are stored in an array where index = the midi note#
