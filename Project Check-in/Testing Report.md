@@ -1,0 +1,6 @@
+I'm still finilazing the amplitude and filter envelopes for each setting. However as I've been testing, I realized that the articulations don't change until a new note is started. In other words, the articulation can't be updated in the middle of a note. I don't think this will be an issue because it will mostlly be used during live user input. However this means that the articulations must be selected before playing a note. I'll need to put this through some real tests.
+
+I had an issue where the master gain slider and vibrato amount slider weren't actually updating anything. This was a silly issue and a pretty easy fix.
+
+I encountered an issue where the vibrato amount slider can't be changed while a note is playing. The vibrato depth would remain constant until the next note was played. The vibrato is controlled by a Tone.js LFO node. I tried moving this node outside of the class definition, and passing the LFO as a parameter, but I got all kinds of errors. This was resolved by keeping the LFO within the local scope of the class. I added an additional event listener for the slider within the class. Now the vibratoAmount value updates globally AND within the class. 
+**It's possible now multiple notes will begin with a different vibratoAmount. I'll have to make sure this isn't an issue**
