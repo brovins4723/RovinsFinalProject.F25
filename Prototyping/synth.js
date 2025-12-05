@@ -17,7 +17,7 @@ export default class Synth {
         this.vibAmount = Number(event.target.value);
         this.vibLFO.max = this.vibAmount;
         this.vibLFO.min = -this.vibAmount;
-        this.vibLFO.frequency.value = 4 + ((0.1*Number(event.target.value))/2); 
+        this.vibLFO.frequency.value = 5 + ((0.1*Number(event.target.value))/2); 
     });
 
         Tone.setContext(this.ctx);
@@ -43,8 +43,13 @@ export default class Synth {
 
         this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
         this.convolver.wet = 1.;
-        this.filter1 = new Tone.Filter(800, "peaking");
-        this.filter2 = new Tone.Filter(3000, "peaking");
+
+        // Individual filters for the violin's formant hill / "bridge hill"
+        this.filter1 = new Tone.Filter(1700, "highshelf");
+        this.filter2 = new Tone.Filter(2500, "peaking");
+        // Set initial gains (in dB)
+        this.filter1.gain.value = 6;
+        this.filter2.gain.value = 12;
 
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
