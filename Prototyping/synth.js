@@ -1,12 +1,13 @@
 // importing Tone.js
 // creating synth class
 export default class Synth {
-    constructor(ctx, midiNote, velocity, envArray, vibrato) {
+    constructor(ctx, midiNote, velocity, maxGain, envArray, vibrato) {
         this.ctx = ctx;
         this.midiNote = midiNote;
         this.velocity = velocity;
         this.envArray = envArray; //contains both amplitude and filter envelopes
 
+        this.maxGain = maxGain;
         this.maxGain = 0.2;      // maximum loudness (one note)
         // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
         // --- --- ---
