@@ -51,10 +51,11 @@ const envArray = [     // array of all amplitude envelopes
   ],
   [                     // amp envelope 4 ; SFORZANDO
   [0.00,    6,    12,      0.00],
-  [0.9,    16,     18,     0.02],   // strong accent
-  [0.70,   11,     15,     0.06],   // fast fall
-  [0.55,    9,     15,     0.30],   // sustain at moderate intensity
-  [0.00,    0,     0,      0.25]
+  [0.95,    18,     20,    0.02],  // explosive attack - very fast, maximum brightness
+  [0.90,   17,     15,     0.015],  // brief peak hold for presence
+  [0.65,   12,     12,     0.08],   // dramatic fall after accent
+  [0.50,    9,     12,     0.25],   // settle into sustain
+  [0.00,    6,     9,      0.20]    // smooth release
   ],
   [                     // amp envelope 5 ; SLURRED
   [0.00,   6,    9,     0.00],
