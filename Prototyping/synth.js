@@ -65,7 +65,7 @@ dynamic3.addEventListener('click', () => {
 
         // Set initial gains (in dB)
         this.filter1.gain.value = 6;
-        this.filter2.gain.value = 12;
+        this.filter2.gain.value = 6;
         //this.lpFilter.gain.value = 12;
 
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
