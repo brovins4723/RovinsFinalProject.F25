@@ -45,8 +45,8 @@ const envArray = [     // array of all amplitude envelopes
   [                     // amp envelope 3 ; SPICCATO
   [0.00,   6,    12,     0.00],
   [0.8,   15,    17,     0.02],  // very sharp bite from the bow impact
-  [0.45,  10,    6,      0.02],   // immediate fall as bow leaves the string
-  [0.00,   6,    0,      0.50],    // long ringing body resonance (release)
+  [0.45,  10,    6,      0.02],  // immediate fall as bow leaves the string
+  [0.00,   6,    0,      0.50],  // long ringing body resonance (release)
   [0.00,   0,    0,      0.05],    
   ],
   [                     // amp envelope 4 ; SFORZANDO
