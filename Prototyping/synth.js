@@ -3,25 +3,31 @@
 export default class Synth {
     constructor(ctx, midiNote, velocity, maxGain, envArray, vibrato) {
         this.ctx = ctx;
+        Tone.setContext(this.ctx);
+
         this.midiNote = midiNote;
         this.velocity = velocity;
         this.envArray = envArray; //contains both amplitude and filter envelopes
 
-        this.maxGain = maxGain;
-        this.maxGain = 0.2;      // maximum loudness (one note)
+        this.maxGain = maxGain;    // maximum loudness (one note)
+        this.vibAmount = vibrato;
+
         // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
         // --- --- ---
 
-    this.vibAmount = vibrato;
-    document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
-    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
-        this.vibAmount = Number(event.target.value);
-        this.vibLFO.max = this.vibAmount;
-        this.vibLFO.min = -this.vibAmount;
-        this.vibLFO.frequency.value = 5 + ((0.1*Number(event.target.value))/2); 
-    });
+const dynamic1 = document.getElementById('dynamic1');
+const dynamic2 = document.getElementById('dynamic2');
+const dynamic3 = document.getElementById('dynamic3');
+dynamic1.addEventListener('click', () => {
+  this.maxGain = 0.1;
+});
+dynamic2.addEventListener('click', () => {
+  this.maxGain = 0.4;
+});
+dynamic3.addEventListener('click', () => {
+  this.maxGain = 0.8;
+});
 
-        Tone.setContext(this.ctx);
         this.freq = this.mtof(this.midiNote)
 
         this.osc = new Tone.Oscillator(this.freq, "sawtooth");
@@ -38,25 +44,34 @@ export default class Synth {
        
         // Start LFO immediately (does it need to happen in the start method?)(no! it should be running continuously!)
         this.vibLFO.start();
-       
         // Connect LFO to the oscillator freq value  
         this.vibLFO.connect(this.osc.detune);
+        
+    document.querySelector("#vibratoAmount").addEventListener("input", (event)=>{
+    document.querySelector("#vibratoAmountValue").textContent = `${event.target.value}`
+        this.vibAmount = Number(event.target.value);
+        this.vibLFO.max = this.vibAmount;
+        this.vibLFO.min = -this.vibAmount;
+        this.vibLFO.frequency.value = 5 + ((0.1*Number(event.target.value))/2); 
+    });
 
-        this.convolver = new Tone.Convolver("IR files/celloIR(cello3_eqed_dc).wav"); // new convolver node with IR file inside buffer
+        this.convolver = new Tone.Convolver("IR files/violinIR(violin3_dc).wav"); // new convolver node with IR file inside buffer
         this.convolver.wet = 1.;
 
         // Individual filters for the violin's formant hill / "bridge hill"
         this.filter1 = new Tone.Filter(1700, "highshelf");
         this.filter2 = new Tone.Filter(2500, "peaking");
+       // this.fillpFilterter2 = new Tone.Filter(2500, "highshelf");
+
         // Set initial gains (in dB)
         this.filter1.gain.value = 6;
         this.filter2.gain.value = 12;
+        //this.lpFilter.gain.value = 12;
 
         this.ampEnv = new GainNode(this.ctx);   // vanilla javascript audio node
 
         this.osc.connect(this.convolver).connect(this.filter1);
-        this.convolver.connect(this.filter2);
-        Tone.connect(this.filter1, this.ampEnv);
+        this.filter1.connect(this.filter2);
         Tone.connect(this.filter2, this.ampEnv);
 
     }
@@ -67,42 +82,30 @@ export default class Synth {
 
     start(midiNote, velocity) {
         const now = this.ctx.currentTime;
-        const peakAmp = velocity/127 * this.maxGain;    // using velocity of each note to calculate percent of max gain
+        this.velocityAmp = velocity/127
+        this.peakAmp = this.velocityAmp * this.maxGain;    // using velocity of each note to calculate percent of max gain
 
         //ADSR ramp !
         //running time variable for Amplitude
-        let tAmp = now;
-        //reset the envelope...
+        let t = now;
+        //reset the envelopes...
         this.ampEnv.gain.cancelScheduledValues(now);
-        this.ampEnv.gain.setValueAtTime(0, now); 
+        this.ampEnv.gain.setValueAtTime(0,now);
+        this.filter1.gain.cancelScheduledValues(now);
+        this.filter2.gain.cancelScheduledValues(now);
         // iterate thru array --- ramp to the % of peakAmp value over duration 
         // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.envArray.length - 1; i++) {
-        this.ampEnv.gain.linearRampToValueAtTime(peakAmp * this.envArray[i][0], tAmp);
-        tAmp += this.envArray[i][3]
-        };
-       
-        //Filter center freq envelope !
-        //running time variable for Filter1
-        let tFilt1 = now;
-        //reset the envelope...
-        this.filter1.frequency.cancelScheduledValues(now);
-        // iterate thru array --- ramp to the cutoff value over duration 
-        // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.envArray.length - 1; i++) {
-        this.filter1.frequency.linearRampToValueAtTime(this.envArray[i][1], tFilt1);
-        tFilt1 += this.envArray[i][3];
-        };  
+        for (let i=0; i < this.envArray.length -1; i++) {
+            this.ampValue = this.envArray[i][0];
+            this.filt1 = this.envArray[i][1];
+            this.filt2 = this.envArray[i][2];
+            this.duration = this.envArray[i][3]; 
 
-        //running time variable for Filter2
-        let tFilt2 = now;
-        //reset the envelope...
-        this.filter2.frequency.cancelScheduledValues(now);
-        // iterate thru array --- ramp to the cutoff value over duration 
-        // release stage is handled by synth.stop(), only up to the second to last element in array
-        for (let i=0; i < this.envArray.length - 1; i++) {
-        this.filter2.frequency.linearRampToValueAtTime(this.envArray[i][2], tFilt2);
-        tFilt2 += this.envArray[i][3];
+            t += this.duration;
+
+            this.ampEnv.gain.linearRampToValueAtTime(this.peakAmp * this.ampValue, t);
+            this.filter1.gain.linearRampToValueAtTime(this.filt1, t);
+            this.filter2.gain.linearRampToValueAtTime(this.filt2, t);
         };
         
         //start the oscillator
