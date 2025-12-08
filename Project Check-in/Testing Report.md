@@ -4,3 +4,5 @@ I had an issue where the master gain slider and vibrato amount slider weren't ac
 
 I encountered an issue where the vibrato amount slider can't be changed while a note is playing. The vibrato depth would remain constant until the next note was played. The vibrato is controlled by a Tone.js LFO node. I tried moving this node outside of the class definition, and passing the LFO as a parameter, but I got all kinds of errors. This was resolved by keeping the LFO within the local scope of the class. I added an additional event listener for the slider within the class. Now the vibratoAmount value updates globally AND within the class. 
 **It's possible now multiple notes will begin with a different vibratoAmount. I'll have to make sure this isn't an issue**
+
+Encounterd another problem where switching articulations during a note would sometimes leave other notes playing. I'm not exactly sure what the issue was, but it was fixed by using the stop audio button to cancel every note in the array.
