@@ -12,7 +12,7 @@ export default class MIDIengine {
         this.onPitchBend = function () {};
 
         this._midiAccess = null;
-
+ 
         // Request access (secure context + user permission required)
         navigator.requestMIDIAccess()
             .then(this._onMIDISuccess.bind(this), this._onMIDIFailure.bind(this));
