@@ -13,7 +13,7 @@ export default class Synth {
         this.vibAmount = vibrato;
 
         // --- --- --- SWITCHTED TO ALL TONE.JS AUDIO NODES --- --- ---
-        // --- --- ---
+        // --- --- --- 
 
 const dynamic1 = document.getElementById('dynamic1');
 const dynamic2 = document.getElementById('dynamic2');
