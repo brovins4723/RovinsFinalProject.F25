@@ -27,40 +27,41 @@ const envArray = [     // array of all amplitude envelopes
   // [0, 800, 3000, 0.4],
   // ],
   [                     // amp envelope 1 ; LEGATO
-  [0.00,   6,    12,  0.00],
-  [0.80,   9,   9,  0.20],   // slow bow-attack
-  [0.65,   6,   10,   0.10],   // slight decay
+  [0.00,   6,    9,  0.00],
+  [0.60,   9,   9,  0.20],    // slow bow-attack
+  [0.45,   6,   10,   0.10],   // slight decay
   [0.60,   6,   9,    0.40],   // sustain plateau
   [0.00,   6,   9,    0.40]    // soft release
   ],
   [                     // amp envelope 2 ; STACCATO
   [0.00,   6,    12,     0.00],
-  [0.90,   13,    16,    0.02],  // bite
-  [0.40,   10,    14,    0.04],  // quick decay
-  [0.20,   8,    12,     0.08],  // brief sustain
-  [0.00,   6,    6,     0.45]
+  [0.70,   13,    12,    0.05],  // bite??
+  [0.50,   10,    9,    0.1],  // quick decay
+  [0.20,   8,    6,     0.08],  // brief sustain
+  [0.00,   6,    6,     0.45],
+  [0.00,   0,    0,     0.55],    
   ],
   [                     // amp envelope 3 ; SPICCATO
   [0.00,   6,    12,     0.00],
-  [0.8,   15,    17,     0.02],  // very sharp bite from the bow impact
-  [0.45,  10,    6,      0.02],  // immediate fall as bow leaves the string
+  [0.7,   15,    17,     0.05],  // very sharp bite from the bow impact
+  [0.3,  10,    6,      0.2],  // immediate fall as bow leaves the string
   [0.00,   6,    0,      0.50],  // long ringing body resonance (release)
-  [0.00,   0,    0,      0.55],    
+  [0.00,   0,    0,      0.4],    
   ],
   [                     // amp envelope 4 ; SFORZANDO
   [0.00,    6,    12,      0.00],
-  [0.9,    15,     15,    0.30],  // explosive attack - very fast, maximum brightness
-  [0.8,    15,     15,     0.02],  // brief peak hold for presence
-  [0.65,   12,     12,     0.08],   // dramatic fall after accent
+  [0.8,    15,     15,    0.2],  // explosive attack - very fast, maximum brightness
+  [0.6,    15,     15,     0.02],  // brief peak hold for presence
+  [0.5,   12,     12,     0.1],   // dramatic fall after accent
   [0.50,    9,     12,     0.25],   // settle into sustain
   [0.00,    9,     9,      0.50]    // smooth release
   ],
   [                     // amp envelope 5 ; SLURRED
-  [0.00,   6,    9,     0.00],
-  [0.70,   9,    13,    0.30],   // soft bow change
-  [0.55,   8,    12,    0.12],
-  [0.50,   7,    9,     0.50],   // very stable sustain
-  [0.00,   6,    9,     0.55]
+  [0.00,   6,    9,  0.00],
+  [0.40,   9,   9,  0.20],    // slow bow-attack
+  [0.65,   6,   10,   0.10],   // slight decay
+  [0.60,   6,   9,    0.40],   // sustain plateau
+  [0.00,   6,   9,    0.40]    // soft release
   ]
 ];
 
@@ -160,8 +161,8 @@ dynamic1.addEventListener('click', () => {
   dynamicNum = 0;
   console.log(dynamicNum);
   maxGain = 0.1;
-  lpFilter.frequency.value = 2500;
-  lpFilter.gain.value = -3;
+  lpFilter.frequency.value = 2000;
+  lpFilter.gain.value = -6;
 });
 
 dynamic2.addEventListener('click', () => {
